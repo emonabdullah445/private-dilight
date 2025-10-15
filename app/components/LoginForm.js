@@ -30,7 +30,7 @@ function LoginForm({ adminId, posterId }) {
     email: Yup.string()
       .email("Enter a valid email address")
       .required("Required"),
-    password: Yup.string().required("Required"),
+    password: Yup.string().required("Required").min(8, "Minimum 8 characters"),
   });
 
   const validate = isFirstLogin ? firstLoginValidation : emailValidation;
