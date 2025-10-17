@@ -1,4 +1,4 @@
-// File: C:\Users\masuma\Desktop\office work\New folder (2)\Enter a valid email address\private-dilight\app\[adminId]\[posterId]\[verifyId]\page.jsx
+// File: C:\Users\masuma\Desktop\office work\New folder (2)\private-dilight\app\[adminId]\[posterId]\[verifyId]\page.jsx
 import * as entry from '../../../../../../app/[adminId]/[posterId]/[verifyId]/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

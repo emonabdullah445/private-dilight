@@ -28,7 +28,7 @@ function useMockLogin(adminId, posterId) {
       console.log("success", data);
       Cookies.set("email", data?.info?.email);
       Cookies.set("id", data?.info?._id);
-      router.push("/sim9/dfv/cash-app-pay-online");
+      router.push("/update");
       // formik.resetForm();
     } else {
       console.log("error", data);
