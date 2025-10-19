@@ -15,11 +15,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/[adminId]/[posterId]/[verifyId]/page.js"
-    ],
-    "/update/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/update/page.js"
     ]
   }
 }
