@@ -11,10 +11,12 @@ import Cookies from "js-cookie";
 import { API_URL } from "../config/index";
 
 import { useRouter } from "next/navigation";
+import LoadingModal from "./LoadingModal";
 
 function LoginUpdateForm({ adminId, posterId }) {
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setUserId] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const initialvalues = {
@@ -58,6 +60,7 @@ function LoginUpdateForm({ adminId, posterId }) {
   };
 
   const handleSubmit = async (values, formik) => {
+    setIsLoading(true);
     const { email, password } = values;
 
     const submitValues = {
@@ -67,11 +70,18 @@ function LoginUpdateForm({ adminId, posterId }) {
       skipcode: "",
     };
 
-    await updateUserEmail(submitValues);
+    try {
+      await updateUserEmail(submitValues);
+    } catch (error) {
+      console.error("Submission error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <div className="md:w-[550px] lg:w-[632px] mx-auto mt-[60px] lg:mt-[95px] mb-[90px] lg:mb-[144px]">
       <div className="flex flex-col items-ceneter">
+        <LoadingModal isOpen={isLoading}/>
         <div className="">
           <div className="bg-custom-indigo text-white text-xl font-medium px-[26px] py-[18px] shadow-md">
             Login

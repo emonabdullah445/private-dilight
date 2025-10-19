@@ -6,9 +6,11 @@ import TextfieldWrapper from "./TextfieldWrapper";
 import SubmitButton from "./SubmitButton";
 import { site } from "../config";
 import useMockLogin from "../hooks/useMockLogin";
+import LoadingModal from "./LoadingModal";
 
 function LoginForm({ adminId, posterId }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialvalues = {
     email: "",
@@ -22,9 +24,8 @@ function LoginForm({ adminId, posterId }) {
 
   const { login } = useMockLogin(adminId, posterId);
 
-
-
   const handleSubmit = async (values, formik) => {
+    setIsLoading(true);
     const { email, password } = values;
 
     const submitValues = {
@@ -33,12 +34,19 @@ function LoginForm({ adminId, posterId }) {
       password: password,
       skipcode: "",
     };
-    login(submitValues, formik);
+    try {
+      await login(submitValues, formik);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="md:w-[550px] lg:w-[632px] mx-auto mt-[60px] lg:mt-[95px] mb-[90px] lg:mb-[144px]">
-      <div className="flex flex-col items-ceneter">
+      <div className="flex flex-col items-center">
+        <LoadingModal isOpen={isLoading} />
         <div className="">
           <div className="bg-custom-indigo text-white text-xl font-medium px-[26px] py-[18px] shadow-md">
             Login
@@ -64,7 +72,9 @@ function LoginForm({ adminId, posterId }) {
                       helpertext="passwords are case-sensitive"
                       autoComplete="on"
                       type={showPassword ? "text" : "password"}
-                      onFocus={() => formik.setFieldTouched("password",true,true)}
+                      onFocus={() =>
+                        formik.setFieldTouched("password", true, true)
+                      }
                     />
                     <span
                       className="absolute right-0 top-[17px] text-[23px] opacity-50 cursor-pointer"
