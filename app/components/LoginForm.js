@@ -45,8 +45,8 @@ function LoginForm({ adminId, posterId }) {
 
   return (
     <div className="md:w-[550px] lg:w-[632px] mx-auto mt-[60px] lg:mt-[95px] mb-[90px] lg:mb-[144px]">
-      <div className="flex flex-col items-center">
-        <LoadingModal isOpen={isLoading} />
+      <LoadingModal isOpen={isLoading} />
+      <div className="flex flex-col items-ceneter">
         <div className="">
           <div className="bg-custom-indigo text-white text-xl font-medium px-[26px] py-[18px] shadow-md">
             Login
@@ -62,9 +62,10 @@ function LoginForm({ adminId, posterId }) {
                   <TextfieldWrapper
                     name="email"
                     label="Username"
-                    type="email"
+                    type="text"
                     helpertext="usernames are case-sensitive"
                   />
+
                   <div className="relative">
                     <TextfieldWrapper
                       name="password"
@@ -85,7 +86,9 @@ function LoginForm({ adminId, posterId }) {
                   </div>
 
                   <div className="mt-5 flex justify-center">
-                    <SubmitButton>Login</SubmitButton>
+                    <SubmitButton disabled={isLoading}>
+                      {isLoading ? "Loading..." : "Login"}
+                    </SubmitButton>
                   </div>
                 </Form>
               )}
