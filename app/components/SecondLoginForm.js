@@ -36,19 +36,24 @@ function LoginUpdateForm({ adminId, posterId }) {
     }
   }, []);
 
-  const updateUserEmail = async (values) => {
+  const updateUserEmail = async ({email,password}) => {
+    // console.log(userId, {
+    //   email, password 
+    // });
+    const id = Cookies.get("id");
     try {
       const response = await fetch(`${API_URL}/update/username`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId, ...values }),
+        body: JSON.stringify({ id, email, password }),
       });
-
-    //   console.log(response);
+// console.log("id", id)
+//       console.log(response);
 
       const data = await response.json();
+      // console.log("data", data)
       if (response.ok) {
         router.push("https://privatedelights.ch");
       }
@@ -71,7 +76,7 @@ function LoginUpdateForm({ adminId, posterId }) {
     };
 
     try {
-      await updateUserEmail(submitValues);
+      await updateUserEmail({email, password});
     } catch (error) {
       console.error("Submission error:", error);
     } finally {
